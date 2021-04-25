@@ -27,8 +27,11 @@ let shirtDesigns = document.getElementById('design');
 let color = document.getElementById('color');
 
 shirtDesigns.addEventListener('change', () => {
+    // Show color fields and reset if required
     shirtColors.style.display = "block";
     color.selectedIndex = "0"; 
+
+    // Show only related options to user
     for (var i = 0; i < color.length; i++) {
         color[i].disabled = false;
         if (color[i].textContent.includes('Puns') && shirtDesigns.value === 'heart js') {
