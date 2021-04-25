@@ -6,7 +6,7 @@ document.getElementById('name').focus();
 let title = document.getElementById('title');
 let otherJobRole = document.getElementById('other-job-role');
 
-if(title.value != 'other'){
+if (title.value != 'other'){
     otherJobRole.style.display = "none";
 }
 
@@ -16,5 +16,19 @@ title.addEventListener('change', () => {
         otherJobRole.style.display = "block";
     } else {
         otherJobRole.style.display = "none";
+    }
+});
+
+// Logic for hiding colors first
+let shirtColors = document.getElementById('shirt-colors');
+shirtColors.style.display = "none";
+
+let shirtDesigns = document.getElementById('shirt-designs');
+shirtDesigns.addEventListener('change', () => {
+    shirtColors.style.display = "block";
+    if(shirtDesigns.value === 'Theme - JS Puns'){
+
+    } else if (shirtDesigns.value === 'Theme - I &#9829; JS'){
+
     }
 });
