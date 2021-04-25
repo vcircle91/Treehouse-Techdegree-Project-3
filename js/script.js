@@ -23,12 +23,19 @@ title.addEventListener('change', () => {
 let shirtColors = document.getElementById('shirt-colors');
 shirtColors.style.display = "none";
 
-let shirtDesigns = document.getElementById('shirt-designs');
+let shirtDesigns = document.getElementById('design');
+let color = document.getElementById('color');
+
 shirtDesigns.addEventListener('change', () => {
     shirtColors.style.display = "block";
-    if(shirtDesigns.value === 'Theme - JS Puns'){
-
-    } else if (shirtDesigns.value === 'Theme - I &#9829; JS'){
-
+    color.selectedIndex = "0"; 
+    for (var i = 0; i < color.length; i++) {
+        color[i].disabled = false;
+        if (color[i].textContent.includes('Puns') && shirtDesigns.value === 'heart js') {
+            color[i].disabled = true;
+        }
+        if (color[i].textContent.includes('I') && shirtDesigns.value === 'js puns') {
+            color[i].disabled = true;
+        }
     }
 });
