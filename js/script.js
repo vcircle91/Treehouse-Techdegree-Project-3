@@ -42,3 +42,16 @@ shirtDesigns.addEventListener('change', () => {
         }
     }
 });
+
+// Logic for total amount for activities
+let activitiesCost = document.querySelector('.activities-cost');
+let totalAmount = 0;
+
+document.querySelector('.activities').addEventListener('change', (e) => {
+    if (e.target.checked) {
+    totalAmount += parseInt(e.target.dataset.cost);
+    } else {
+    totalAmount -= parseInt(e.target.dataset.cost);
+    }
+    activitiesCost.textContent = "Total: $" + totalAmount
+});
