@@ -2,13 +2,10 @@
 document.getElementById('name').focus();
 
 // Hide other job role by default
-// As browsers can remember previous choice after refresh I am going for some if statement.
 let title = document.getElementById('title');
 let otherJobRole = document.getElementById('other-job-role');
+otherJobRole.style.display = "none";
 
-if (title.value != 'other'){
-    otherJobRole.style.display = "none";
-}
 
 // If other job role is chosen display additional field. Otherwise hide it again
 title.addEventListener('change', () => {
@@ -55,3 +52,7 @@ document.querySelector('.activities').addEventListener('change', (e) => {
     }
     activitiesCost.textContent = "Total: $" + totalAmount
 });
+
+// Choose credit card as standard payment method
+let paymethod = document.getElementById('payment');
+paymethod.value = 'credit-card';
