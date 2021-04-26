@@ -56,3 +56,28 @@ document.querySelector('.activities').addEventListener('change', (e) => {
 // Choose credit card as standard payment method
 let paymethod = document.getElementById('payment');
 paymethod.value = 'credit-card';
+
+// Hide other payment methods for now
+let paymentSelector = document.querySelector('#payment');
+let cardBox = document.querySelector('.credit-card');
+let paypalBox = document.querySelector('.paypal');
+let bitcoinBox = document.querySelector('.bitcoin');
+paypalBox.style.display = "none";
+bitcoinBox.style.display = "none";
+
+// Only show box for selected payment method
+paymentSelector.addEventListener('change', () => {
+    // Set all inactive...
+    paypalBox.style.display = "none";
+    bitcoinBox.style.display = "none";
+    cardBox.style.display = "none";
+
+    //... And the chosen one active again. No loop required for this three pay types.
+    if (paymentSelector.value === 'paypal') {
+        paypalBox.style.display = "block";
+    } else if (paymentSelector.value === 'bitcoin') {
+        bitcoinBox.style.display = "block";
+    } else if (paymentSelector.value === 'credit-card') {
+        cardBox.style.display = "block";
+    } 
+});
