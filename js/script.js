@@ -89,6 +89,7 @@ emailField = document.querySelector('#email');
 
 // Function to check if field is empty
 function checkField(field) {
+    let formInvalid = false;
     // Go through every field received in array and check
     for (var i = 0; i < field.length; i++) {
     if (field[i].value === '') {
@@ -99,8 +100,10 @@ function checkField(field) {
                 e.target.nextElementSibling.style.display = "none";
             }
         });
+        formInvalid = true;
     }
     }
+    return formInvalid;
 }
 
 // Funcion to check if at least one activity got chosen. I will use totalAmount to make it simple.
@@ -122,10 +125,11 @@ activities.addEventListener('change', () => {
 // Listen for form submit and raise valisation error if name is empty
 form.addEventListener('submit', (e) => {
     // Prevent default behaviour
-    e.preventDefault();
 
-    // Deliver fields to check as array
-    checkField([nameField, emailField]);
+    // Deliver fields to check as array and prevent default if correction needed
+    if (checkField([nameField, emailField])) {
+        e.preventDefault();
+    }
 
     checkActivitieschosen();
 
