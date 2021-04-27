@@ -86,6 +86,14 @@ paymentSelector.addEventListener('change', () => {
 form = document.querySelector('form');
 nameField = document.querySelector('#name');
 emailField = document.querySelector('#email');
+cardNumberField = document.querySelector('#cc-num');
+zipField = document.querySelector('#zip');
+cvvField = document.querySelector('#cvv');
+
+// Function to validate email, Regex from https://emailregex.com/
+function isValidEMail(email) {
+    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+}
 
 // Function to check if field is empty
 function checkField(field) {
@@ -106,6 +114,19 @@ function checkField(field) {
     return formInvalid;
 }
 
+// Function to check card number
+function checkCardNumber(number) {
+    return /^\d{13,16}$/.test(number);
+}
+
+function checkZip(zip) {
+    return /^\d{5}$/.test(zip);
+}
+
+function checkCvv(cvv) {
+    return /^\d{3}$/.test(cvv);
+}
+
 // Funcion to check if at least one activity got chosen. I will use totalAmount to make it simple.
 let activitiesHint = document.querySelector('#activities-hint');
 function checkActivitieschosen() {
@@ -124,24 +145,35 @@ activities.addEventListener('change', () => {
 
 // Listen for form submit and raise valisation error if name is empty
 form.addEventListener('submit', (e) => {
-    // Prevent default behaviour
-
     // Deliver fields to check as array and prevent default if correction needed
     if (checkField([nameField, emailField])) {
         e.preventDefault();
     }
-
+    // Check activities
     checkActivitieschosen();
 
+    // Check card fields if card got chosen
+    if (paymentSelector.value === 'credit-card') {
+        // Check card number
+        if (!checkCardNumber(cardNumberField.value)) {
+            e.preventDefault();
+            cardNumberField.nextElementSibling.style.display = "inherit";
+        }
+        // Check zip
+        if (!checkZip(zipField.value)) {
+            e.preventDefault();
+            zipField.nextElementSibling.style.display = "inherit";
+        }
+        // Check security code
+        if (!checkCvv(cvvField.value)) {
+            e.preventDefault();
+            cvvField.nextElementSibling.style.display = "inherit";
+        }
+}
 });
 
-// Function to validate email 
-// Regex from https://emailregex.com/
-function isValidEMail(email) {
-    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
-}
 
-// Validate email in real time, again with nested Event Listener.
+// Validate email in real time with nested Event Listener.
 emailField.addEventListener('blur', () => {
     if (!isValidEMail(emailField.value)) {
         emailField.nextElementSibling.style.display = "inherit";
