@@ -85,6 +85,7 @@ paymentSelector.addEventListener('change', () => {
 
 form = document.querySelector('form');
 nameField = document.querySelector('#name');
+emailField = document.querySelector('#email');
 
 // Listen for form submit and raise valisation error if name is empty
 form.addEventListener('submit', (e) => {
@@ -99,5 +100,24 @@ form.addEventListener('submit', (e) => {
             }
         });
     }
+});
+
+// Function to validate email 
+// Regex from https://emailregex.com/
+function isValidEMail(email) {
+    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+}
+
+// Validate email in real time, again with nested Event Listener.
+emailField.addEventListener('blur', () => {
+    if (!isValidEMail(emailField.value)) {
+        emailField.nextElementSibling.style.display = "inherit";
+        // Hide validation message instantly when corrected
+        emailField.addEventListener('input', () => {
+            if (isValidEMail(emailField.value)) {
+                emailField.nextElementSibling.style.display = "none";
+            }
+        });
+    } 
 });
 
