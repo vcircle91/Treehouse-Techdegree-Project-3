@@ -81,3 +81,23 @@ paymentSelector.addEventListener('change', () => {
         cardBox.style.display = "block";
     } 
 });
+
+
+form = document.querySelector('form');
+nameField = document.querySelector('#name');
+
+// Listen for form submit and raise valisation error if name is empty
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (nameField.value === '') {
+        nameField.nextElementSibling.style.display = "inherit";
+        // Add new Event listener to hise error again
+        nameField.addEventListener('input', (e) => {
+            if (e.target.value) {
+                e.preventDefault();
+                nameField.nextElementSibling.style.display = "none";
+            }
+        });
+    }
+});
+
