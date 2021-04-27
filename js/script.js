@@ -87,19 +87,48 @@ form = document.querySelector('form');
 nameField = document.querySelector('#name');
 emailField = document.querySelector('#email');
 
-// Listen for form submit and raise valisation error if name is empty
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (nameField.value === '') {
-        nameField.nextElementSibling.style.display = "inherit";
-        // Add new Event listener to hise error again
-        nameField.addEventListener('input', (e) => {
+// Function to check if field is empty
+function checkField(field) {
+    // Go through every field received in array and check
+    for (var i = 0; i < field.length; i++) {
+    if (field[i].value === '') {
+        field[i].nextElementSibling.style.display = "inherit";
+        // Add new Event listener to remove error again
+        field[i].addEventListener('input', (e) => {
             if (e.target.value) {
-                e.preventDefault();
-                nameField.nextElementSibling.style.display = "none";
+                e.target.nextElementSibling.style.display = "none";
             }
         });
     }
+    }
+}
+
+// Funcion to check if at least one activity got chosen. I will use totalAmount to make it simple.
+let activitiesHint = document.querySelector('#activities-hint');
+function checkActivitieschosen() {
+    if (totalAmount === 0) {
+        activitiesHint.style.display = "inherit";
+    }
+}
+
+// Check if some activity got chosen to hide validation after choosing activity
+activities.addEventListener('change', () => {
+    if (totalAmount != 0) {
+        activitiesHint.style.display = "none";
+    }
+});
+
+
+// Listen for form submit and raise valisation error if name is empty
+form.addEventListener('submit', (e) => {
+    // Prevent default behaviour
+    e.preventDefault();
+
+    // Deliver fields to check as array
+    checkField([nameField, emailField]);
+
+    checkActivitieschosen();
+
 });
 
 // Function to validate email 
@@ -120,4 +149,5 @@ emailField.addEventListener('blur', () => {
         });
     } 
 });
+
 
