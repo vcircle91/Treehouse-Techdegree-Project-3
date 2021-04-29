@@ -186,4 +186,15 @@ emailField.addEventListener('blur', () => {
     } 
 });
 
+// Add accessibility to checkboxes
+const allActivities = document.querySelector('#activities-box').childNodes
 
+for(var i=0; i < allActivities.length; i++) {
+        allActivities[i].addEventListener('focusin', (e) => {
+            e.target.parentElement.classList.add("focus");
+        });
+
+        allActivities[i].addEventListener('focusout', (e) => {
+            e.target.parentElement.classList.remove("focus");
+        });
+};
