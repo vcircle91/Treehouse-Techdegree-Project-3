@@ -188,7 +188,8 @@ form.addEventListener('submit', (e) => {
         validationError(activitiesCost);
         e.preventDefault();
     }
-    // Check card number
+    // Check card number (And remove whitespace if required)
+    cardNumberField.value = cardNumberField.value.replace(/ /g, '');
     if (!checkCardNumber(cardNumberField) && paymentSelector.value === 'credit-card') {
         validationError(cardNumberField);
         e.preventDefault();
