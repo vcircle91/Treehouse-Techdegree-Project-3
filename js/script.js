@@ -1,9 +1,79 @@
+// Variable Declarations
+const form = document.querySelector('form');
+const nameField = document.querySelector('#name');
+const emailField = document.querySelector('#email');
+const cardNumberField = document.querySelector('#cc-num');
+const zipField = document.querySelector('#zip');
+const cvvField = document.querySelector('#cvv');
+let paymentSelector = document.querySelector('#payment');
+let cardBox = document.querySelector('.credit-card');
+let paypalBox = document.querySelector('.paypal');
+let bitcoinBox = document.querySelector('.bitcoin');
+let paymethod = document.getElementById('payment');
+let title = document.getElementById('title');
+let otherJobRole = document.getElementById('other-job-role');
+let shirtColors = document.getElementById('shirt-colors');
+let activitiesHint = document.querySelector('#activities-hint');
+let shirtDesigns = document.getElementById('design');
+let color = document.getElementById('color');
+let activitiesCost = document.querySelector('.activities-cost');
+let totalAmount = 0;
+const allActivities = document.querySelector('#activities-box').childNodes
+
+// Function to raise validation errors
+function validationError(field) {
+    // Highlight error
+    field.nextElementSibling.style.display = "inherit";
+    field.parentElement.classList.add('not-valid');
+    field.parentElement.classList.remove('valid');
+}
+
+function validationCorrection(field) {
+    // Highlight error
+    field.nextElementSibling.style.display = "none";
+    field.parentElement.classList.add('valid');
+    field.parentElement.classList.remove('not-valid');
+}
+
+// Function to validate email, Regex from https://emailregex.com/
+function checkEmail(email) {
+    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.value);
+}
+
+// Function to check name
+function checkName(name) {
+    return /^\w/.test(name.value);
+}
+
+
+// Function to check card number
+function checkCardNumber(number) {
+    return /^\d{13,16}$/.test(number.value);
+}
+
+// Function to check zip
+function checkZip(zip) {
+    return /^\d{5}$/.test(zip.value);
+}
+
+// Function to check cvv
+function checkCvv(cvv) {
+    return /^\d{3}$/.test(cvv.value);
+}
+
+// Funcion to check if at least one activity got chosen. I will use totalAmount to make it simple.
+function checkActivitieschosen() {
+    if (totalAmount === 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 // Put focus on name field
 document.getElementById('name').focus();
 
 // Hide other job role by default
-let title = document.getElementById('title');
-let otherJobRole = document.getElementById('other-job-role');
 otherJobRole.style.display = "none";
 
 
@@ -17,12 +87,9 @@ title.addEventListener('change', () => {
 });
 
 // Logic for hiding colors first
-let shirtColors = document.getElementById('shirt-colors');
 shirtColors.style.display = "none";
 
-let shirtDesigns = document.getElementById('design');
-let color = document.getElementById('color');
-
+// Logic to only show matching shirts
 shirtDesigns.addEventListener('change', () => {
     // Show color fields and reset if required
     shirtColors.style.display = "block";
@@ -41,9 +108,6 @@ shirtDesigns.addEventListener('change', () => {
 });
 
 // Logic for total amount for activities
-let activitiesCost = document.querySelector('.activities-cost');
-let totalAmount = 0;
-
 document.querySelector('.activities').addEventListener('change', (e) => {
     if (e.target.checked) {
     totalAmount += parseInt(e.target.dataset.cost);
@@ -54,14 +118,9 @@ document.querySelector('.activities').addEventListener('change', (e) => {
 });
 
 // Choose credit card as standard payment method
-let paymethod = document.getElementById('payment');
 paymethod.value = 'credit-card';
 
 // Hide other payment methods for now
-let paymentSelector = document.querySelector('#payment');
-let cardBox = document.querySelector('.credit-card');
-let paypalBox = document.querySelector('.paypal');
-let bitcoinBox = document.querySelector('.bitcoin');
 paypalBox.style.display = "none";
 bitcoinBox.style.display = "none";
 
@@ -83,57 +142,7 @@ paymentSelector.addEventListener('change', () => {
 });
 
 
-form = document.querySelector('form');
-nameField = document.querySelector('#name');
-emailField = document.querySelector('#email');
-cardNumberField = document.querySelector('#cc-num');
-zipField = document.querySelector('#zip');
-cvvField = document.querySelector('#cvv');
 
-// Function to validate email, Regex from https://emailregex.com/
-function isValidEMail(email) {
-    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
-}
-
-// Function to check if field is empty
-function checkField(field) {
-    let formInvalid = false;
-    // Go through every field received in array and check
-    for (var i = 0; i < field.length; i++) {
-    if (field[i].value === '') {
-        field[i].nextElementSibling.style.display = "inherit";
-        // Add new Event listener to remove error again
-        field[i].addEventListener('input', (e) => {
-            if (e.target.value) {
-                e.target.nextElementSibling.style.display = "none";
-            }
-        });
-        formInvalid = true;
-    }
-    }
-    return formInvalid;
-}
-
-// Function to check card number
-function checkCardNumber(number) {
-    return /^\d{13,16}$/.test(number);
-}
-
-function checkZip(zip) {
-    return /^\d{5}$/.test(zip);
-}
-
-function checkCvv(cvv) {
-    return /^\d{3}$/.test(cvv);
-}
-
-// Funcion to check if at least one activity got chosen. I will use totalAmount to make it simple.
-let activitiesHint = document.querySelector('#activities-hint');
-function checkActivitieschosen() {
-    if (totalAmount === 0) {
-        activitiesHint.style.display = "inherit";
-    }
-}
 
 // Check if some activity got chosen to hide validation after choosing activity
 activities.addEventListener('change', () => {
@@ -143,52 +152,83 @@ activities.addEventListener('change', () => {
 });
 
 
-// Listen for form submit and raise valisation error if name is empty
+// Check form when button got hit
 form.addEventListener('submit', (e) => {
-    // Deliver fields to check as array and prevent default if correction needed
-    if (checkField([nameField, emailField])) {
+    // Check name
+    if (!checkName(nameField)) {
+        validationError(nameField);
         e.preventDefault();
     }
-    // Check activities
-    checkActivitieschosen();
-
-    // Check card fields if card got chosen
-    if (paymentSelector.value === 'credit-card') {
-        // Check card number
-        if (!checkCardNumber(cardNumberField.value)) {
-            e.preventDefault();
-            cardNumberField.nextElementSibling.style.display = "inherit";
-        }
-        // Check zip
-        if (!checkZip(zipField.value)) {
-            e.preventDefault();
-            zipField.nextElementSibling.style.display = "inherit";
-        }
-        // Check security code
-        if (!checkCvv(cvvField.value)) {
-            e.preventDefault();
-            cvvField.nextElementSibling.style.display = "inherit";
-        }
-}
+    // Check email
+    if (!checkEmail(emailField)) {
+        validationError(emailField);
+        e.preventDefault();
+    }
+    // Check activitied
+    if (!checkActivitieschosen()) {
+        validationError(activitiesCost);
+        e.preventDefault();
+    }
+    // Check card number
+    if (!checkCardNumber(cardNumberField) && paymentSelector.value === 'credit-card') {
+        validationError(cardNumberField);
+        e.preventDefault();
+    }
+    // Check zip code
+    if (!checkZip(zipField) && paymentSelector.value === 'credit-card') {
+        validationError(zipField);
+        e.preventDefault();
+    }
+    // Check cvv
+    if (!checkCvv(cvvField) && paymentSelector.value === 'credit-card') {
+        validationError(cvvField);
+        e.preventDefault();
+    }
 });
 
-
-// Validate email in real time with nested Event Listener.
-emailField.addEventListener('blur', () => {
-    if (!isValidEMail(emailField.value)) {
-        emailField.nextElementSibling.style.display = "inherit";
-        // Hide validation message instantly when corrected
-        emailField.addEventListener('input', () => {
-            if (isValidEMail(emailField.value)) {
-                emailField.nextElementSibling.style.display = "none";
-            }
-        });
-    } 
+// Show nameField as correct when filled out correctly
+nameField.addEventListener('change', (e) => {
+    if (checkName(nameField)) {
+        validationCorrection(nameField);
+    }
 });
 
-// Add accessibility to checkboxes
-const allActivities = document.querySelector('#activities-box').childNodes
+// Show emailField as correct when filled out correctly
+emailField.addEventListener('change', (e) => {
+    if (checkEmail(emailField)) {
+        validationCorrection(emailField);
+    }
+});
 
+// Show activities as correct when filled out correctly
+activitiesCost.parentNode.addEventListener('change', (e) => {
+    if (checkActivitieschosen(activitiesCost)) {
+        validationCorrection(activitiesCost);
+    }
+});
+
+// Show cardNumberField as correct when filled out correctly
+cardNumberField.addEventListener('change', (e) => {
+    if (checkCardNumber(cardNumberField)) {
+        validationCorrection(cardNumberField);
+    }
+});
+
+// Show zip as correct when filled out correctly
+zipField.addEventListener('change', (e) => {
+    if (checkZip(zipField)) {
+        validationCorrection(zipField);
+    }
+});
+
+// Show cvv as correct when filled out correctly
+cvvField.addEventListener('change', (e) => {
+    if (checkCvv(cvvField)) {
+        validationCorrection(cvvField);
+    }
+});
+
+// Add accessibility to checkboxes - selecting all children from #activities-box and add EventListeners to them
 for(var i=0; i < allActivities.length; i++) {
         allActivities[i].addEventListener('focusin', (e) => {
             e.target.parentElement.classList.add("focus");
