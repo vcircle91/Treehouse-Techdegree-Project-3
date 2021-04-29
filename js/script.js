@@ -5,20 +5,22 @@ const emailField = document.querySelector('#email');
 const cardNumberField = document.querySelector('#cc-num');
 const zipField = document.querySelector('#zip');
 const cvvField = document.querySelector('#cvv');
-let paymentSelector = document.querySelector('#payment');
-let cardBox = document.querySelector('.credit-card');
-let paypalBox = document.querySelector('.paypal');
-let bitcoinBox = document.querySelector('.bitcoin');
-let paymethod = document.getElementById('payment');
-let title = document.getElementById('title');
-let otherJobRole = document.getElementById('other-job-role');
-let shirtColors = document.getElementById('shirt-colors');
-let activitiesHint = document.querySelector('#activities-hint');
-let shirtDesigns = document.getElementById('design');
-let color = document.getElementById('color');
-let activitiesCost = document.querySelector('.activities-cost');
-let totalAmount = 0;
+const paymentSelector = document.querySelector('#payment');
+const cardBox = document.querySelector('.credit-card');
+const paypalBox = document.querySelector('.paypal');
+const bitcoinBox = document.querySelector('.bitcoin');
+const paymethod = document.getElementById('payment');
+const title = document.getElementById('title');
+const otherJobRole = document.getElementById('other-job-role');
+const shirtColors = document.getElementById('shirt-colors');
+const activitiesHint = document.querySelector('#activities-hint');
+const shirtDesigns = document.getElementById('design');
+const color = document.getElementById('color');
+const activitiesCost = document.querySelector('.activities-cost');
+const activitiesBox = document.querySelector('#activities-box')
 const allActivities = document.querySelector('#activities-box').childNodes
+const checkboxes = activitiesBox.querySelectorAll('input[type="checkbox"]');
+let totalAmount = 0;
 
 // Function to raise validation errors
 function validationError(field) {
@@ -70,6 +72,22 @@ function checkActivitieschosen() {
     }
 }
 
+// This function is there to make sure that only one activity at the same time can get chosen.
+function checkActivitiesConflicts() {
+    for (let i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener('click', (e) => {
+            for (let i = 0; i < checkboxes.length; i++) {
+                if (e.target.checked && e.target != checkboxes[i]) {
+                if (checkboxes[i].dataset.dayAndTime === e.target.dataset.dayAndTime){
+                    checkboxes[i].checked = false;
+                }
+            } 
+            }
+        });
+        }
+    }
+
+
 // Put focus on name field
 document.getElementById('name').focus();
 
@@ -108,11 +126,12 @@ shirtDesigns.addEventListener('change', () => {
 });
 
 // Logic for total amount for activities
-document.querySelector('.activities').addEventListener('change', (e) => {
-    if (e.target.checked) {
-    totalAmount += parseInt(e.target.dataset.cost);
-    } else {
-    totalAmount -= parseInt(e.target.dataset.cost);
+document.querySelector('.activities').addEventListener('click', (e) => {
+    totalAmount = 0;
+    for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            totalAmount += parseInt(checkboxes[i].dataset.cost);
+        }
     }
     activitiesCost.textContent = "Total: $" + totalAmount
 });
@@ -197,6 +216,8 @@ nameField.addEventListener('change', (e) => {
 emailField.addEventListener('change', (e) => {
     if (checkEmail(emailField)) {
         validationCorrection(emailField);
+    } else {
+        validationError(emailField);
     }
 });
 
@@ -238,3 +259,6 @@ for(var i=0; i < allActivities.length; i++) {
             e.target.parentElement.classList.remove("focus");
         });
 };
+
+// Prevent conflicts with appointments
+checkActivitiesConflicts()
