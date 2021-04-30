@@ -189,10 +189,14 @@ form.addEventListener('submit', (e) => {
         e.preventDefault();
     }
     // Check card number (And remove whitespace if required)
-    cardNumberField.value = cardNumberField.value.replace(/ /g, '');
     if (!checkCardNumber(cardNumberField) && paymentSelector.value === 'credit-card') {
         validationError(cardNumberField);
         e.preventDefault();
+        if (cardNumberField.value.includes(' ')){
+            cardNumberField.nextElementSibling.innerHTML = "Please only insert numbers.";
+        } else {
+            cardNumberField.nextElementSibling.innerHTML = "Credit card number must be between 13 - 16 digits"; 
+        }
     }
     // Check zip code
     if (!checkZip(zipField) && paymentSelector.value === 'credit-card') {
