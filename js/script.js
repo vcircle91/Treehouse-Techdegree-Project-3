@@ -115,12 +115,12 @@ shirtDesigns.addEventListener('change', () => {
 
     // Show only related options to user
     for (var i = 0; i < color.length; i++) {
-        color[i].disabled = false;
+        color[i].style.display = "inherit";
         if (color[i].textContent.includes('Puns') && shirtDesigns.value === 'heart js') {
-            color[i].disabled = true;
+            color[i].style.display = "none";
         }
         if (color[i].textContent.includes('I') && shirtDesigns.value === 'js puns') {
-            color[i].disabled = true;
+            color[i].style.display = "none";
         }
     }
 });
